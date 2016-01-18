@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Exam</title>
+		<link rel="stylesheet" href="/layouts/${data.name}/css">
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			var socket = io();
+		</script>
+	</head>
+	<body>
+		<section class="landing page">
+			<h2 class="greeting">EXAM BOOKLET</h2>
+			<div class="instructions">When the timer below begins, you may start the test</div>
+			<div class="timer">${data.timer}</div>
+			<button type="button" class="button" disabled>Start Test</button>
+		</section>
+		<script src="/layouts/${data.name}/js"></script>
+	</body>
+</html>

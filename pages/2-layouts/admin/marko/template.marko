@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Admin Panel</title>
+		<link rel="stylesheet" href="/layouts/${data.name}/css">
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			var socket = io();
+		</script>
+	</head>
+	<body>
+		<section class="dashboard">
+			<div class="main panel">
+				<div class="first cell">
+					<if test="data.active === true">
+						<var name="status" value="'active'"/>
+						<var name="toggle" value="'disable'"/>
+						<var name="button" value="'Disable'"/>
+					</if>
+					<else>
+						<var name="status" value="'inactive'"/>
+						<var name="toggle" value="'enable'"/>
+						<var name="button" value="'Enable'"/>
+					</else>
+					<div class="activity">The exam is <span class="status">$status</span></div>
+					<div class="instructions">Click here to <span class="toggle">$toggle</span> the exam</div>
+					<button class="button">$button</button>
+				</div>
+			</div>
+			<div class="second cell">
+				<div class="timer">${data.timer}</div>
+			</div>
+		</section>
+		<script src="/layouts/${data.name}/js"></script>
+	</body>
+</html>
