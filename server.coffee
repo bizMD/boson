@@ -1,5 +1,6 @@
 require 'sugar'
 fs = require 'fs'
+crypto = require 'crypto'
 domain = require 'domain'
 restify = require 'restify'
 socketio = require 'socket.io'
@@ -17,6 +18,10 @@ require('marko/node-require').install();
 d = domain.create()
 d.on 'error', (error) -> console.log error
 
+# Create the database connection
+#DB = require resolve 'db', 'DB.coffee'
+#db = new DB
+
 # Create the web server and use middleware
 server = restify.createServer name: 'Boson'
 server.use restify.bodyParser()
@@ -29,6 +34,12 @@ io = socketio.listen server.server
 # Status of the exam
 active = false
 timer = 15 * 60 * 1000
+users = {}
+
+sessionKey = ->
+    sha = crypto.createHash 'sha256'
+    sha.update Math.random().toString()
+    sha.digest 'hex'
 
 timestyle = (timer) ->
 	time = timer/1000
@@ -41,17 +52,29 @@ timekeep = ->
 	timer -= 1000
 	io.emit 'time left', timestyle timer
 	timekeep.delay 1000 if timer != 0
-	io.emit 'end exam' if timer == 0
+	timestop() if timer == 0
 
 timestop = ->
 	io.emit 'end exam'
+	active = false
 	timekeep.cancel()
+	timer = 0
 
 # Redirect to home if accessing root
 server.get '/', (rq, rs, nx) -> rs.redirect '/home', nx
 
 # Serve layout CSS and JS
 server.get '/layouts/:name/:type', (args...) -> routes.utils.serveLayouts args
+
+##
+#Temp var to store the questions
+##
+fs = require 'fs'
+
+server.get '/question/test', (rq, rs, nx) ->
+	rs.writeHead 200, {"Content-Type": "application/json"}
+	q = fs.createReadStream './db/questions.json'
+	q.pipe rs
 
 server.get '/:name', (rq, rs, nx) ->
 	{name} = rq.params
@@ -62,21 +85,37 @@ server.get '/:name', (rq, rs, nx) ->
 		name: name
 		active: active
 		timer: timestyle timer
+		options: [
+			'test1'
+			'test2'
+			'test3'
+			'test4'
+			'test5'
+		]
 	, rs
 
 io.sockets.on 'connection', (socket) ->
 	console.log 'a user connected'
 
 	socket.on 'toggle exam', ->
-		if timer == 0
-			socket.emit 'cannot toggle'
-			return false
+		return false if timer == 0
 		active = !active
 		switch active
 			when true
 				socket.broadcast.emit 'begin exam', true
 				timekeep()
 			when false then timestop()
+
+	socket.on 'user registered', ->
+		# Super no security method
+		key = sessionKey()
+		users[key] = socket
+		socket.emit 'user id', {key: key, id: Object.size users}
+
+	socket.on 'authenticate user', (id) ->
+		console.log "Authentication requested: #{id}"
+		if users[id] then socket.emit 'authenticated'
+		else socket.emit 'not authenticated'
 
 # Run the server under an active domain
 d.run ->

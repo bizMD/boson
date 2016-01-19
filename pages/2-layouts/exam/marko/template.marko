@@ -9,34 +9,19 @@
 		</script>
 	</head>
 	<body>
-		<section class="exam page">
-			<h2 class="section name">JAVASCRIPT</h2>
-			<h3 class="tester ID">ID# <span class="ID number">0001</span></h3>
-			<div class="question box">
-				<div class="question text">Trace this program. What does it print?</div>
-				<pre><code>
-					var trackMe = false;
-
-					var asyncFn = function(x) {
-						asyncReadFile(function(err, data){
-							x = data;
-						});
-					}
-
-					asyncFn(x);
-					console.log(x);
-				</code></pre>
-			</div>
-			<div class="answer area">
-				<div class="input">
-					<div class="textbox">
-						<input type="text" placeholder="Enter your answer here"/>
-					</div>
-				</div>
-				<button type="button" class="button">Submit</button>
-			</div>
-			<footer class="footer">Time left: <span class="timer">${data.timer}</span></footer>
-		</section>
-		<!--<script src="/layouts/${data.name}/js"></script>-->
+		<if test="data.active === true">
+			<section class="exam page">
+				<include template="./heading.marko"/>
+				<include template="./question.marko"/>
+				<include template="./answer.marko"/>
+				<footer class="footer">Time left: <span class="timer">${data.timer}</span></footer>
+			</section>
+		</if>
+		<else>
+			<script>
+				window.location = '/home';
+			</script>
+		</else>
+		<script src="/layouts/${data.name}/js"></script>
 	</body>
 </html>

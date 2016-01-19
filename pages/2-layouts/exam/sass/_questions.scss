@@ -1,0 +1,15 @@
+.text {
+	@include padding(1.5% null 0.5% null);
+}
+
+pre {
+	@include margin(0);
+	text-align: left;
+}
+
+code {
+	@include span-columns(12);
+	@include padding(1.5%);
+	background-color: #FAFAFA;
+	border-radius: 10px;
+}

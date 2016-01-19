@@ -35,3 +35,6 @@ node_modules
 
 # Ignore sass cache
 .sass-cache
+
+# Ignore loki db
+loki.db

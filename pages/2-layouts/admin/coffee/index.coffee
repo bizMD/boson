@@ -2,26 +2,24 @@ $ = require 'jquery'
 
 toggleActivity = (active) ->
 	switch active
-		when 'Enable'
+		when 'Start'
 			$('.status').html 'active'
-			$('.toggle').html 'disable'
-			$('.button').html 'Disable'
-		when 'Disable'
+			$('.toggle').html 'conclude'
+			$('.button').html 'Stop'
+		when 'Stop'
 			$('.status').html 'inactive'
 			$('.toggle').html 'enable'
-			$('.button').html 'Enable'
+			$('.button').html 'Start'
 
 concludeActivity = ->
 	$('.button').remove()
 	$('.instructions').remove()
 	$('.status').html 'concluded'
+	$('.timer').html '0:00'
 
 $ ->
 	socket.on 'time left', (time) ->
 		$('.timer').html "#{time}"
-
-	socket.on 'cannot toggle', (time) ->
-		console.log 'Cannot toggle'
 
 	socket.on 'end exam', ->
 		concludeActivity()

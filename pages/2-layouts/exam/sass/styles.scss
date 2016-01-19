@@ -1,4 +1,9 @@
 @import "../../../0-vendor/vendor";
 @import "../../../1-base/base";
 
-@import "design";
+@import "mixins";
+@import "base";
+@import "heading";
+@import "questions";
+@import "answers";
+@import "footer";

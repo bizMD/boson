@@ -9838,29 +9838,27 @@ $ = require('jquery');
 
 toggleActivity = function(active) {
   switch (active) {
-    case 'Enable':
+    case 'Start':
       $('.status').html('active');
-      $('.toggle').html('disable');
-      return $('.button').html('Disable');
-    case 'Disable':
+      $('.toggle').html('conclude');
+      return $('.button').html('Stop');
+    case 'Stop':
       $('.status').html('inactive');
       $('.toggle').html('enable');
-      return $('.button').html('Enable');
+      return $('.button').html('Start');
   }
 };
 
 concludeActivity = function() {
   $('.button').remove();
   $('.instructions').remove();
-  return $('.status').html('concluded');
+  $('.status').html('concluded');
+  return $('.timer').html('0:00');
 };
 
 $(function() {
   socket.on('time left', function(time) {
     return $('.timer').html("" + time);
-  });
-  socket.on('cannot toggle', function(time) {
-    return console.log('Cannot toggle');
   });
   socket.on('end exam', function() {
     return concludeActivity();

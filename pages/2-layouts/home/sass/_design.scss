@@ -22,10 +22,3 @@ body {
 	border-radius: 5px;
 	background-color: #FBF6F6;
 }
-
-button {
-	@include span-columns(2);
-	@include size(null 1.3em);
-	@include padding(0);
-	cursor: pointer;
-}

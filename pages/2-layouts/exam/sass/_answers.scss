@@ -1,0 +1,36 @@
+.answer {
+	@include span-columns(12);
+	@include size(null 1.3em);
+}
+
+.input {
+	@include padding(1.5% null 0.5% null);
+	@include fill-parent();
+}
+
+.label {
+	@include span-columns(12);
+	@include padding(0.75%);
+	border: 1px solid #E2E2E2;
+	box-shadow: 0 0 5px #F3F0F0;
+	text-align: center;
+	font: 0.85em 'Roboto Slab', serif;
+	font-weight: normal;
+}
+
+.label:hover {
+	background-color: #78A4E3;
+}
+
+.radio:checked + .label {
+	background-color: #A6BFE3;
+	font-weight: bold;
+}
+
+input[type="radio"] {
+	@include hide();
+}
+
+.button {
+	@include fill-parent();
+}

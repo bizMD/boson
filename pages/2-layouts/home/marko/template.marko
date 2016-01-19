@@ -13,7 +13,7 @@
 			<h2 class="greeting">EXAM BOOKLET</h2>
 			<div class="instructions">When the timer below begins, you may start the test</div>
 			<div class="timer">${data.timer}</div>
-			<button type="button" class="button" disabled>Start Test</button>
+			<include template="./button.marko" template-data="{active:data.active, timer:data.timer}"/>
 		</section>
 		<script src="/layouts/${data.name}/js"></script>
 	</body>

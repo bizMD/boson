@@ -1,0 +1,7 @@
+body {
+	font: 0.85em 'Roboto Slab', serif;
+}
+
+.hidden {
+	@include hide();
+}

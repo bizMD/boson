@@ -1,0 +1,13 @@
+.section {
+	@include span-columns(12);
+	@include padding(3.5% null 0.5% null);
+	@include margin(0);
+	font-size: 2em;
+}
+
+.tester {
+	@include span-columns(12);
+	@include padding(0 null 2% null);
+	@include margin(0);
+	font-size: 1em;
+}

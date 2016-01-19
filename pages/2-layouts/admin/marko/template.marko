@@ -17,13 +17,13 @@
 					</if>
 					<else-if test="data.active === true">
 						<var name="status" value="'active'"/>
-						<var name="toggle" value="'disable'"/>
-						<var name="button" value="'Disable'"/>
+						<var name="toggle" value="'conclude'"/>
+						<var name="button" value="'Stop'"/>
 					</else-if>
 					<else>
-						<var name="status" value="'inactive'"/>
-						<var name="toggle" value="'enable'"/>
-						<var name="button" value="'Enable'"/>
+						<var name="status" value="'not yet begun'"/>
+						<var name="toggle" value="'commence'"/>
+						<var name="button" value="'Start'"/>
 					</else>
 					<div class="activity">The exam is <span class="status">$status</span></div>
 					<if test="data.timer != '0:00'">

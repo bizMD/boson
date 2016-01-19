@@ -16,16 +16,16 @@ function create(__helpers) {
     else if (data.active === true) {
       var status = 'active';
 
-      var toggle = 'disable';
+      var toggle = 'conclude';
 
-      var button = 'Disable';
+      var button = 'Stop';
     }
     else {
-      var status = 'inactive';
+      var status = 'not yet begun';
 
-      var toggle = 'enable';
+      var toggle = 'commence';
 
-      var button = 'Enable';
+      var button = 'Start';
     }
 
     out.w('<div class="activity">The exam is <span class="status">' +

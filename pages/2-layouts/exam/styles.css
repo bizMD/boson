@@ -567,6 +567,9 @@ section {
 body {
   font: 0.85em 'Roboto Slab', serif; }
 
+.hidden {
+  display: none; }
+
 .section {
   float: left;
   display: block;
@@ -618,12 +621,38 @@ code {
   height: 1.3em; }
   .answer:last-child {
     margin-right: 0; }
-  .answer .input {
-    padding-top: 1.5%;
-    padding-bottom: 0.5%;
-    width: 100%; }
-  .answer .button {
-    width: 100%; }
+
+.input {
+  padding-top: 1.5%;
+  padding-bottom: 0.5%;
+  width: 100%; }
+
+.label {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 100%;
+  padding: 0.75%;
+  border: 1px solid #E2E2E2;
+  box-shadow: 0 0 5px #F3F0F0;
+  text-align: center;
+  font: 0.85em 'Roboto Slab', serif;
+  font-weight: normal; }
+  .label:last-child {
+    margin-right: 0; }
+
+.label:hover {
+  background-color: #78A4E3; }
+
+.radio:checked + .label {
+  background-color: #A6BFE3;
+  font-weight: bold; }
+
+input[type="radio"] {
+  display: none; }
+
+.button {
+  width: 100%; }
 
 .footer {
   position: fixed;

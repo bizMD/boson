@@ -25,6 +25,7 @@
     "coffee-script": "^1.10.0",
     "jquery": "^2.2.0",
     "marko": "^2.8.2",
+    "oboe": "^2.1.2",
     "require-dir": "^0.3.0",
     "restify": "^4.0.3",
     "socket.io": "^1.4.4",
