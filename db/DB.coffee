@@ -66,6 +66,8 @@ class DB
 	_init: =>
 		@_initCollection collection for collection in [
 			'questions'
+			'answers'
+			'users'
 		]
 		null
 

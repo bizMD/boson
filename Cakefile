@@ -37,9 +37,18 @@ task 'docs', 'Create documentation for the source code', ->
 		console.log 'ERROR! Could not generate documents'
 		console.log error
 
+task 'clean', 'Remove all the built JS, CSS files', ->
+	del ['pages/**/build/*']
+	.then (paths) ->
+		console.log 'Deleted files: ' + paths.join ', '
+		new Promise (done) -> done()
+	.catch (error) ->
+		console.log 'ERROR! Could not clean build'
+		console.log error
+
 task 'style', 'Compile SCSS into CSS', ->
 	console.log 'Compiling SCSS files...'
-	sass_cmd = "sass -r sass-globbing styles.scss ../styles.css"
+	sass_cmd = "sass -r sass-globbing styles.scss ../build/styles.css"
 	globby ['**/styles.scss']
 	.then (paths) ->
 		new Promise (done, reject) ->
@@ -58,7 +67,7 @@ task 'script', 'Compile Coffeescript into JS', ->
 		new Promise (done, reject) ->
 			for path, index in paths
 				run = browserify_cmd
-				.concat resolve path, '../..'
+				.concat resolve path, '../..', 'build'
 				.concat "#{sep}index.js "
 				.concat path
 				console.log "Coffee to JS: #{path}"
@@ -78,22 +87,16 @@ task 'minify', 'Minify all index.js and styles.css files', ->
 	.then (paths) -> exec minifycss_cmd, cwd: dirname path for path in paths
 
 task 'build', 'Compile CSS and JS at the same time', ->
-	Promise.join (invoke 'style'), (invoke 'script')
-	.then -> invoke 'minify'
+	invoke 'clean'
+	.then ->
+		Promise.join (invoke 'style'), (invoke 'script')
+		.then -> invoke 'minify'
 
 task 'test', 'Run unit tests with Mocha, Chai, and Zombie', ->
 	console.log 'Not yet implemented'
 
 task 'benchmark', 'Run performance tests with Matcha', ->
 	console.log 'Not yet implemented'
-
-task 'clean', 'Clean the build', ->
-	del ['db/*', '!db/.gitkeep']
-	.then (paths) ->
-		console.log 'Deleted files: ' + paths.join ', '
-	.catch (error) ->
-		console.log 'ERROR! Could not clean build'
-		console.log error
 
 task 'watch', 'Reset the server on file change', ->
 	server = spinServer()

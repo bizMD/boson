@@ -4,7 +4,7 @@ function create(__helpers) {
       notEmpty = __helpers.ne;
 
   return function render(data, out) {
-    out.w('<div class="answer area"><div class="input"><div class="textbox hidden"></div><div class="choices hidden"></div></div><button type="button" class="button">Submit</button></div>');
+    out.w('<html><head><meta charset="UTF-8"><title>Exam</title><script src="/socket.io/socket.io.js"></script><script>\n\t\t\tvar socket = io();\n\t\t</script></head><body></body></html>');
   };
 }
 (module.exports = require("marko").c(__filename)).c(create);

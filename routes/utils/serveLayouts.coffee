@@ -4,7 +4,7 @@ fs = require 'fs'
 serve = (obj) ->
 	{rs, statusCode, contentType, content, layout} = obj
 	rs.writeHead statusCode, {"Content-Type": contentType}
-	file = fs.createReadStream resolve 'pages', '2-layouts', layout, content
+	file = fs.createReadStream resolve 'pages', '2-layouts', layout, 'build', content
 	file.pipe rs
 
 module.exports = ([rq, rs, nx]) ->

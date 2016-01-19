@@ -19,8 +19,8 @@ d = domain.create()
 d.on 'error', (error) -> console.log error
 
 # Create the database connection
-#DB = require resolve 'db', 'DB.coffee'
-#db = new DB
+DB = require resolve 'db', 'DB.coffee'
+db = new DB
 
 # Create the web server and use middleware
 server = restify.createServer name: 'Boson'
@@ -34,7 +34,6 @@ io = socketio.listen server.server
 # Status of the exam
 active = false
 timer = 15 * 60 * 1000
-users = {}
 
 sessionKey = ->
     sha = crypto.createHash 'sha256'
@@ -76,8 +75,19 @@ server.get '/question/test', (rq, rs, nx) ->
 	q = fs.createReadStream './db/questions.json'
 	q.pipe rs
 
+server.get '/question/current', (rq, rs, nx) ->
+	{userid} = rq.params
+	rs.writeHead 200, {"Content-Type": "application/json"}
+	answers = db.getCollection 'answers'
+	answered = answers.find user: userid
+	console.log answered
+	rs.end '0'
+	nx()
+
 server.get '/:name', (rq, rs, nx) ->
 	{name} = rq.params
+	# Cannot take exam if time is over, test is inactive
+	rs.redirect '/home', nx if name == 'exam' and (timer == 0 or active == false)
 	rs.writeHead 200, {"Content-Type": "text/html"}
 	template = resolve 'pages', '2-layouts', name, 'marko', 'template.marko'
 	view  = require template
@@ -85,14 +95,19 @@ server.get '/:name', (rq, rs, nx) ->
 		name: name
 		active: active
 		timer: timestyle timer
-		options: [
-			'test1'
-			'test2'
-			'test3'
-			'test4'
-			'test5'
-		]
 	, rs
+
+server.post '/submit', (rq, rs, nx) ->
+	{qid, answer, userid} = rq.params
+	answers = db.getCollection 'answers'
+	users = db.getCollection 'users'
+	user = users.findOne key: userid
+	answers.insert
+		qid: qid
+		answer: answer
+		user: user.key
+	rs.writeHead 200, {"Content-Type": "text/html"}
+	rs.end()
 
 io.sockets.on 'connection', (socket) ->
 	console.log 'a user connected'
@@ -108,13 +123,15 @@ io.sockets.on 'connection', (socket) ->
 
 	socket.on 'user registered', ->
 		# Super no security method
+		users = db.getCollection 'users'
 		key = sessionKey()
-		users[key] = socket
-		socket.emit 'user id', {key: key, id: Object.size users}
+		users.insert key: key
+		socket.emit 'user id', {key: key, id: users.data.length}
 
 	socket.on 'authenticate user', (id) ->
+		users = db.getCollection 'users'
 		console.log "Authentication requested: #{id}"
-		if users[id] then socket.emit 'authenticated'
+		if users.find {key: id} then socket.emit 'authenticated'
 		else socket.emit 'not authenticated'
 
 # Run the server under an active domain
