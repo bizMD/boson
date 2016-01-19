@@ -11,6 +11,11 @@ toggleActivity = (active) ->
 			$('.toggle').html 'enable'
 			$('.button').html 'Enable'
 
+concludeActivity = ->
+	$('.button').remove()
+	$('.instructions').remove()
+	$('.status').html 'concluded'
+
 $ ->
 	socket.on 'time left', (time) ->
 		$('.timer').html "#{time}"
@@ -19,7 +24,7 @@ $ ->
 		console.log 'Cannot toggle'
 
 	socket.on 'end exam', ->
-		toggleActivity 'Disable'
+		concludeActivity()
 
 	$('.button').click ->
 		return false if $('.timer').html() is '0:00'

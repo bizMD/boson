@@ -28,7 +28,7 @@ io = socketio.listen server.server
 
 # Status of the exam
 active = false
-timer = 60 * 15 * 1000
+timer = 15 * 60 * 1000
 
 timestyle = (timer) ->
 	time = timer/1000
@@ -81,5 +81,5 @@ io.sockets.on 'connection', (socket) ->
 # Run the server under an active domain
 d.run ->
 	# Log when the web server starts up
-	server.listen 8001, -> console.log "#{server.name}[#{process.pid}] online: #{server.url}"
+	server.listen 80, -> console.log "#{server.name}[#{process.pid}] online: #{server.url}"
 	console.log "#{server.name} is starting..."

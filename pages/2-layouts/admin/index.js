@@ -9832,7 +9832,7 @@ return jQuery;
 }));
 
 },{}],2:[function(require,module,exports){
-var $, toggleActivity;
+var $, concludeActivity, toggleActivity;
 
 $ = require('jquery');
 
@@ -9849,6 +9849,12 @@ toggleActivity = function(active) {
   }
 };
 
+concludeActivity = function() {
+  $('.button').remove();
+  $('.instructions').remove();
+  return $('.status').html('concluded');
+};
+
 $(function() {
   socket.on('time left', function(time) {
     return $('.timer').html("" + time);
@@ -9857,7 +9863,7 @@ $(function() {
     return console.log('Cannot toggle');
   });
   socket.on('end exam', function() {
-    return toggleActivity('Disable');
+    return concludeActivity();
   });
   return $('.button').click(function() {
     if ($('.timer').html() === '0:00') {

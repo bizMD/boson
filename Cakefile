@@ -42,23 +42,29 @@ task 'style', 'Compile SCSS into CSS', ->
 	sass_cmd = "sass -r sass-globbing styles.scss ../styles.css"
 	globby ['**/styles.scss']
 	.then (paths) ->
-		for path in paths
-			sass_dir = dirname path
-			console.log "SCSS to CSS: #{path}"
-			exec sass_cmd, cwd: sass_dir, (error) -> throw error if error?
+		new Promise (done, reject) ->
+			for path, index in paths
+				sass_dir = dirname path
+				console.log "SCSS to CSS: #{path}"
+				exec sass_cmd, cwd: sass_dir, (error) ->
+					reject error if error?
+					done() if index -= 1 is 0
 
 task 'script', 'Compile Coffeescript into JS', ->
 	console.log 'Compiling CoffeeScript files...'
 	browserify_cmd = 'browserify -t coffeeify --extension=".coffee" -o '
 	globby ['pages/**/index.coffee', '!*/0-vendor/**']
 	.then (paths) ->
-		for path in paths
-			run = browserify_cmd
-			.concat resolve path, '../..'
-			.concat "#{sep}index.js "
-			.concat path
-			console.log "Coffee to JS: #{path}"
-			exec run, (error) -> throw error if error?
+		new Promise (done, reject) ->
+			for path, index in paths
+				run = browserify_cmd
+				.concat resolve path, '../..'
+				.concat "#{sep}index.js "
+				.concat path
+				console.log "Coffee to JS: #{path}"
+				exec run, (error) ->
+					reject error if error?
+					done() if index -= 1 is 0
 
 task 'minify', 'Minify all index.js and styles.css files', ->
 	console.log 'Minifying all index.js and styles.css files'
@@ -72,8 +78,8 @@ task 'minify', 'Minify all index.js and styles.css files', ->
 	.then (paths) -> exec minifycss_cmd, cwd: dirname path for path in paths
 
 task 'build', 'Compile CSS and JS at the same time', ->
-	invoke 'style'
-	invoke 'script'
+	Promise.join (invoke 'style'), (invoke 'script')
+	.then -> invoke 'minify'
 
 task 'test', 'Run unit tests with Mocha, Chai, and Zombie', ->
 	console.log 'Not yet implemented'
@@ -94,5 +100,5 @@ task 'watch', 'Reset the server on file change', ->
 	reboot = (path) ->
 		console.log "Change detected in #{path}"
 		server = spinServer server
-	eyes = watch ['server.coffee', 'layouts/**']
+	eyes = watch ['server.coffee', 'pages/**']
 	eyes.on 'change', (path) -> reboot 'server.coffee'

@@ -9838,11 +9838,16 @@ $ = require('jquery');
 
 $(function() {
   socket.on('time left', function(time) {
-    $('.timer').html("" + time);
+    return $('.timer').html("" + time);
+  });
+  socket.on('begin exam', function() {
     return $('.button').removeAttr('disabled');
   });
-  return socket.on('end exam', function() {
+  socket.on('end exam', function() {
     return $('.button').attr('disabled', true);
+  });
+  return $('.button').click(function() {
+    return window.location = '/exam';
   });
 });
 
