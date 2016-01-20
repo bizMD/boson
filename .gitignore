@@ -40,4 +40,4 @@ node_modules
 loki.db
 
 # Ignore build files
-# build/*
+build/*

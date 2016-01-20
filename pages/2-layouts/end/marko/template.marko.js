@@ -11,7 +11,13 @@ function create(__helpers) {
       '/css"><script src="/socket.io/socket.io.js"></script><script>\n\t\t\tvar socket = io();\n\t\t</script></head><body>');
 
     if (data.active === true) {
-      out.w('<section class="closing page"><h2 class="goodbye">EXAM CLOSED</h2><div class="message">You have completed the exam. Congratulations! Please sit tight while your\nfellows do the same. Do not leave this page to receive your\nresults.</div><div class="remaining time">Time left: <span class="timer">' +
+      out.w('<section class="closing page"><h2 class="goodbye">EXAM CLOSED</h2><div class="message">');
+
+      if (data.timer != '0:00') {
+        out.w('<div class="instructions to wait">You have completed the exam. Congratulations!<br> Please sit tight while your fellows finish the test.<br> Do not leave or refresh this page to receive your results.</div>');
+      }
+
+      out.w('<div class="congratulations hidden">Your score: <span class="total score">0</span> out of <span class="total items">0</span></div></div><div class="remaining time">Time left: <span class="timer">' +
         escapeXml(data.timer) +
         '</span></div></section>');
     }

@@ -1,4 +1,6 @@
+require 'sugar'
 $ = require 'jquery'
+oboe = require 'oboe'
 
 toggleActivity = (active) ->
 	switch active
@@ -19,6 +21,7 @@ concludeActivity = ->
 
 createBlock = (data) ->
 	{qid, answer, user} = data
+	console.log data
 
 	console.log 'Creating the block'
 	block = $ '<div></div>'
@@ -50,7 +53,7 @@ createBlock = (data) ->
 			.addClass 'answer'
 	console.log 'Creating the answerHolder'
 	answerHolder = $ '<div></div>'
-			.html 'Their Answer: '
+			.html 'Their Answer: <br/>'
 	console.log 'Appending answerSpan to answerHolder'
 	answerSpan.appendTo answerHolder
 
@@ -104,3 +107,9 @@ $ ->
 		return false if $('.timer').html() is '0:00'
 		socket.emit 'toggle exam', true
 		toggleActivity $('.button').html()
+
+	oboe '/question/answered'
+	.done (data) ->
+		size = Object.size data
+		console.log data
+		createBlock data if size > 0

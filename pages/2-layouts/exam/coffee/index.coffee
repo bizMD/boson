@@ -31,6 +31,7 @@ renderChoices = (choices) ->
 		input.appendTo choice
 		label.appendTo choice
 		choice.appendTo $ '.choices'
+	$('input[type="radio"]:first').prop 'checked', true
 
 renderTextbox = ->
 	freetext = $ '<input>'
@@ -40,6 +41,7 @@ renderTextbox = ->
 		.prop 'placeholder', 'Enter your answer here'
 
 	freetext.appendTo $ '.textbox'
+	freetext.focus()
 
 renderTextarea = ->
 	textarea = $ '<textarea></textarea>'
@@ -48,6 +50,7 @@ renderTextarea = ->
 		.prop 'placeholder', 'Enter your answer here'
 
 	textarea.appendTo $ '.textarea'
+	textarea.focus()
 
 hideQuestion = ->
 	$('.textbox')
@@ -68,6 +71,9 @@ recordAnswer = ->
 	#console.log checkAnswer
 	#console.log textArea
 	answer = if textAnswer.length is 1 then textAnswer.val() else if checkAnswer.length is 1 then checkAnswer.val() else textArea.val()
+	if not answer
+		alert 'Must enter an answer'
+		return false
 	#console.log answer
 	$.post '/submit',
 		qid: qid
@@ -122,6 +128,9 @@ $ ->
 			qid: qid
 			answer: answer
 		recordAnswer()
+
+	$(document).keypress (event) ->
+		$('.button').click() if event.which == 13
 
 	oboe '/question/test'
 	.node '!.*', (module) ->

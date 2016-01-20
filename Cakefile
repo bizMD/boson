@@ -92,7 +92,7 @@ task 'build', 'Compile CSS and JS at the same time', ->
 			Promise.join (invoke 'style'), (invoke 'script')
 			.then ->
 				(-> invoke 'minify').delay 5000
-		).delay 500
+		).delay 5000
 	.catch (error) ->
 		console.log 'ERROR! Could not build'
 		console.log error

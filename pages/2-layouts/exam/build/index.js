@@ -21801,8 +21801,7 @@ questions = [];
 qid = 0;
 
 renderChoices = function(choices) {
-  var choice, i, input, label, len, results;
-  results = [];
+  var choice, i, input, label, len;
   for (i = 0, len = choices.length; i < len; i++) {
     choice = choices[i];
     input = $('<input>').addClass('radio').prop('name', 'answer').prop('type', 'radio').prop('id', choice).prop('value', choice);
@@ -21810,21 +21809,23 @@ renderChoices = function(choices) {
     choice = $('<div>').addClass('choice');
     input.appendTo(choice);
     label.appendTo(choice);
-    results.push(choice.appendTo($('.choices')));
+    choice.appendTo($('.choices'));
   }
-  return results;
+  return $('input[type="radio"]:first').prop('checked', true);
 };
 
 renderTextbox = function() {
   var freetext;
   freetext = $('<input>').addClass('freetext').prop('name', 'answer').prop('type', 'text').prop('placeholder', 'Enter your answer here');
-  return freetext.appendTo($('.textbox'));
+  freetext.appendTo($('.textbox'));
+  return freetext.focus();
 };
 
 renderTextarea = function() {
   var textarea;
   textarea = $('<textarea></textarea>').addClass('answer area').prop('name', 'answer').prop('placeholder', 'Enter your answer here');
-  return textarea.appendTo($('.textarea'));
+  textarea.appendTo($('.textarea'));
+  return textarea.focus();
 };
 
 hideQuestion = function() {
@@ -21841,6 +21842,10 @@ recordAnswer = function() {
   checkAnswer = $('input[name="answer"]:checked');
   textArea = $('textarea.answer');
   answer = textAnswer.length === 1 ? textAnswer.val() : checkAnswer.length === 1 ? checkAnswer.val() : textArea.val();
+  if (!answer) {
+    alert('Must enter an answer');
+    return false;
+  }
   return $.post('/submit', {
     qid: qid,
     answer: answer,
@@ -21901,6 +21906,11 @@ $(function() {
       answer: answer
     });
     return recordAnswer();
+  });
+  $(document).keypress(function(event) {
+    if (event.which === 13) {
+      return $('.button').click();
+    }
   });
   oboe('/question/test').node('!.*', function(module) {
     return questions.push(module);

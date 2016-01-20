@@ -587,6 +587,12 @@ body {
   .message:last-child {
     margin-right: 0; }
 
+.total {
+  font-weight: bold; }
+
+.hidden {
+  display: none; }
+
 .time {
   float: left;
   display: block;
