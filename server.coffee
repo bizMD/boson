@@ -172,8 +172,9 @@ io.sockets.on 'connection', (socket) ->
 		record =
 			key: key
 			id: id
-		users.insert record
 		socket.emit 'user id', record
+		adminSocket.emit 'new user registered', record
+		users.insert record
 
 	socket.on 'authenticate user', (id) ->
 		users = db.getCollection 'users'
@@ -211,6 +212,7 @@ io.sockets.on 'connection', (socket) ->
 		answers.update ans
 		#console.log scores.data
 		console.log ans
+		adminSocket.emit 'update user score', user if checked == 'Correct'
 
 	socket.on 'request for user score', (id) ->
 		console.log 'User requested their score'

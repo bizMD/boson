@@ -572,8 +572,9 @@ body {
   display: block;
   margin-right: 2.35765%;
   width: 100%;
+  padding: 1.5%;
   margin-top: 5%;
-  margin-left: 1.5%; }
+  border-radius: 5px; }
   .main:last-child {
     margin-right: 0; }
 
@@ -623,17 +624,50 @@ body {
   text-align: center;
   line-height: 1em; }
 
+.scoreboard {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 14.70196%;
+  height: 70%;
+  margin-top: 2%;
+  padding: 1%;
+  overflow-y: auto;
+  overflow-x: hidden; }
+  .scoreboard:last-child {
+    margin-right: 0; }
+  .scoreboard ::-webkit-scrollbar {
+    width: 0.5em;
+    height: 0.5em; }
+  .scoreboard ::-webkit-scrollbar-thumb {
+    background: slategray; }
+  .scoreboard ::-webkit-scrollbar-track {
+    background: #b7bfc7; }
+  .scoreboard body {
+    scrollbar-face-color: slategray;
+    scrollbar-track-color: #b7bfc7; }
+
+.examinee.badge {
+  width: 100px;
+  padding: 10%;
+  margin: auto;
+  border-radius: 10%;
+  font: 0.8em arial;
+  color: white;
+  text-align: center;
+  background-color: #6791CD; }
+
 .checking {
   float: left;
   display: block;
   margin-right: 2.35765%;
-  width: 100%;
+  width: 82.94039%;
   margin-top: 2%;
   padding: 1%;
   height: 70%;
   border: 1px solid #EFEEEE;
   border-radius: 10px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden; }
   .checking:last-child {
     margin-right: 0; }
@@ -670,11 +704,11 @@ body {
   margin-top: 5%;
   font-weight: bold; }
 
-.correct {
+.correct, .lefty {
   margin-left: 20%;
   float: left; }
 
-.incorrect {
+.incorrect, .righty {
   margin-right: 20%;
   float: right; }
 

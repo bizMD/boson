@@ -19108,10 +19108,6 @@ $(function() {
   return socket.on('end exam', function() {
     console.log('End exam was fired!');
     socket.emit('request for user score', localStorage.getItem('user id'));
-    socket.emit('unregister user', {
-      key: localStorage.getItem('user id'),
-      id: localStorage.getItem('exam id')
-    });
     console.log('Requested for user score!');
     $('.timer').html('0:00');
     localStorage.removeItem('user id');

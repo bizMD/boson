@@ -14,7 +14,7 @@ function create(__helpers) {
       out.w('<section class="closing page"><h2 class="goodbye">EXAM CLOSED</h2><div class="message">');
 
       if (data.timer != '0:00') {
-        out.w('<div class="instructions to wait">You have completed the exam. Congratulations!<br> Please sit tight while your fellows finish the test.<br> Do not leave or refresh this page to receive your results.</div>');
+        out.w('<div class="instructions to wait">You have completed the exam. Congratulations!<br> Please sit tight while your fellows finish the test.<br> Do not leave this page to receive your results.</div>');
       }
 
       out.w('<div class="congratulations hidden">Your score: <span class="total score">0</span> out of <span class="total items">0</span></div></div><div class="remaining time">Time left: <span class="timer">' +

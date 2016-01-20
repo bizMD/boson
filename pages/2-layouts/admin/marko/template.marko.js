@@ -42,7 +42,7 @@ function create(__helpers) {
 
     out.w('</div><div class="second cell"><div class="timer">' +
       escapeXml(data.timer) +
-      '</div></div></div><div class="manual checking station"></div></section><script src="/layouts/' +
+      '</div></div></div><div class="examinee scoreboard"></div><div class="manual checking station"></div></section><script src="/layouts/' +
       escapeXmlAttr(data.name) +
       '/js"></script></body></html>');
   };

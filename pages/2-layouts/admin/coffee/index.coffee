@@ -28,42 +28,46 @@ createBlock = (data) ->
 			.addClass 'block'
 	
 	console.log 'Creating the qidSpan'
-	qidSpan = $('<span></span>')
+	qidSpan = $ '<span></span>'
 			.html qid
 			.addClass 'qid'
 	console.log 'Creating the qidHolder'
 	qidHolder = $ '<div></div>'
+			.addClass 'lefty'
 			.html 'QID: '
 	console.log 'Appending qidSpan to qidHolder'
 	qidSpan.appendTo qidHolder
 
 	console.log 'Creating the userSpan'
-	userSpan = $('<span></span>')
+	userSpan = $ '<span></span>'
 			.html user
 			.addClass 'user'
 	console.log 'Creating the userHolder'
 	userHolder = $ '<div></div>'
+			.addClass 'righty'
 			.html 'User: '
 	console.log 'Appending userSpan to userHolder'
 	userSpan.appendTo userHolder
 
 	console.log 'Creating the answerSpan'
-	answerSpan = $('<span></span>')
+	answerSpan = $ '<span></span>'
 			.html answer
 			.addClass 'answer'
 	console.log 'Creating the answerHolder'
 	answerHolder = $ '<div></div>'
+			.addClass 'answerText'
 			.html 'Their Answer: <br/>'
 	console.log 'Appending answerSpan to answerHolder'
 	answerSpan.appendTo answerHolder
 
-	correct = $('<div></div>')
+	correct = $ '<div></div>'
 			.addClass 'correct submission'
 			.html 'Correct'
-	incorrect = $('<div></div>')
+	incorrect = $ '<div></div>'
 			.addClass 'incorrect submission'
 			.html 'Incorrect'
-	checker = $('<div></div>').addClass 'checker'
+	checker = $ '<div></div>'
+			.addClass 'checker'
 	correct.appendTo checker
 	incorrect.appendTo checker
 
@@ -73,6 +77,31 @@ createBlock = (data) ->
 	checker.appendTo block
 
 	block.appendTo $ '.checking'
+
+createBadge = (data) ->
+	badge = $ '<div></div>'
+		.addClass 'examinee badge'
+
+	id = $ '<span></span>'
+		.addClass 'badge id'
+		.html data.id
+	idVal = $ '<div></div>'
+		.addClass 'badge id value'
+		.html 'Examinee ID: '
+
+	score = $ '<span></span>'
+		.addClass 'badge score'
+		.html '0'
+	scoreVal = $ '<div></div>'
+		.addClass 'badge score value'
+		.html 'Score: '
+
+	id.appendTo idVal
+	idVal.appendTo badge
+	score.appendTo scoreVal
+	scoreVal.appendTo badge
+
+	badge.appendTo $ '.examinee.scoreboard'
 
 $ ->
 	socket.on 'time left', (time) ->
@@ -87,6 +116,18 @@ $ ->
 	socket.on 'user answered', (data) ->
 		createBlock data
 		console.log data
+
+	socket.on 'new user registered', (data) ->
+		console.log data
+		createBadge data
+
+	socket.on 'update user score', (user) ->
+		score = $ '.examinee.scoreboard'
+				.find ".badge.id:contains('#{user}')"
+				.parent()
+				.find '.badge.score'
+				.children()
+		score.html score.html().toNumber() + 1
 
 	socket.emit 'admin authenticate'
 

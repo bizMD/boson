@@ -39,13 +39,23 @@
 	}
 }
 
+@mixin addBackground($url){
+	background-image: url($url);
+	background-size: cover;
+	color: white;
+}
+
 body {
 	font: 0.85em 'Roboto Slab', serif;
+	//@include addBackground("https://static.pexels.com/photos/6357/coffee-cup-desk-pen.jpg");
 }
 
 .main {
 	@include span-columns(12);
-	@include margin(5% null null 1.5%);
+	@include padding(1.5%);
+	@include margin(5% null null null);
+	//background: rgba(0,0,0,0.4);
+	border-radius: 5px;
 }
 
 .first {
@@ -81,8 +91,29 @@ body {
 	line-height: 1em;
 }
 
+.scoreboard {
+	@include span-columns(2);
+	@include size(null 70%);
+	@include margin(2% null null null);
+	@include padding(1%);
+	@include scrollbars(.5em, slategray);
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.examinee.badge {
+	@include size(100px null);
+	@include padding(10%);
+	@include margin(auto);
+	border-radius: 10%;
+	font: 0.8em arial;
+	color: white;
+	text-align: center;
+	background-color: #6791CD;
+}
+
 .checking {
-	@include span-columns(12);
+	@include span-columns(10);
 	@include margin(2% null null null);
 	@include padding(1%);
 	@include size(null 70%);
@@ -90,7 +121,7 @@ body {
 	//background-color: #EFEEEE;
 	border: 1px solid #EFEEEE;
 	border-radius: 10px;
-	overflow-y: scroll;
+	overflow-y: auto;
 	overflow-x: hidden;
 }
 
@@ -110,12 +141,12 @@ body {
 	font-weight: bold;
 }
 
-.correct {
+.correct, .lefty {
 	@include margin(null null null 20%);
 	float: left;
 }
 
-.incorrect {
+.incorrect, .righty {
 	@include margin(null 20% null null);
 	float: right;
 }

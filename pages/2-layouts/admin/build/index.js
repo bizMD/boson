@@ -21786,7 +21786,7 @@ Date.addLocale('zh-TW', {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],4:[function(require,module,exports){
-var $, concludeActivity, createBlock, oboe, toggleActivity;
+var $, concludeActivity, createBadge, createBlock, oboe, toggleActivity;
 
 require('sugar');
 
@@ -21823,19 +21823,19 @@ createBlock = function(data) {
   console.log('Creating the qidSpan');
   qidSpan = $('<span></span>').html(qid).addClass('qid');
   console.log('Creating the qidHolder');
-  qidHolder = $('<div></div>').html('QID: ');
+  qidHolder = $('<div></div>').addClass('lefty').html('QID: ');
   console.log('Appending qidSpan to qidHolder');
   qidSpan.appendTo(qidHolder);
   console.log('Creating the userSpan');
   userSpan = $('<span></span>').html(user).addClass('user');
   console.log('Creating the userHolder');
-  userHolder = $('<div></div>').html('User: ');
+  userHolder = $('<div></div>').addClass('righty').html('User: ');
   console.log('Appending userSpan to userHolder');
   userSpan.appendTo(userHolder);
   console.log('Creating the answerSpan');
   answerSpan = $('<span></span>').html(answer).addClass('answer');
   console.log('Creating the answerHolder');
-  answerHolder = $('<div></div>').html('Their Answer: <br/>');
+  answerHolder = $('<div></div>').addClass('answerText').html('Their Answer: <br/>');
   console.log('Appending answerSpan to answerHolder');
   answerSpan.appendTo(answerHolder);
   correct = $('<div></div>').addClass('correct submission').html('Correct');
@@ -21848,6 +21848,20 @@ createBlock = function(data) {
   answerHolder.appendTo(block);
   checker.appendTo(block);
   return block.appendTo($('.checking'));
+};
+
+createBadge = function(data) {
+  var badge, id, idVal, score, scoreVal;
+  badge = $('<div></div>').addClass('examinee badge');
+  id = $('<span></span>').addClass('badge id').html(data.id);
+  idVal = $('<div></div>').addClass('badge id value').html('Examinee ID: ');
+  score = $('<span></span>').addClass('badge score').html('0');
+  scoreVal = $('<div></div>').addClass('badge score value').html('Score: ');
+  id.appendTo(idVal);
+  idVal.appendTo(badge);
+  score.appendTo(scoreVal);
+  scoreVal.appendTo(badge);
+  return badge.appendTo($('.examinee.scoreboard'));
 };
 
 $(function() {
@@ -21863,6 +21877,15 @@ $(function() {
   socket.on('user answered', function(data) {
     createBlock(data);
     return console.log(data);
+  });
+  socket.on('new user registered', function(data) {
+    console.log(data);
+    return createBadge(data);
+  });
+  socket.on('update user score', function(user) {
+    var score;
+    score = $('.examinee.scoreboard').find(".badge.id:contains('" + user + "')").parent().find('.badge.score').children();
+    return score.html(score.html().toNumber() + 1);
   });
   socket.emit('admin authenticate');
   $('body').on('click', '.submission', function() {
