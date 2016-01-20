@@ -1,0 +1,129 @@
+/// Mixin to customize scrollbars
+/// Beware, this does not work in all browsers
+/// @author Hugo Giraudel
+/// @param {Length} $size - Horizontal scrollbar's height and vertical scrollbar's width
+/// @param {Color} $foreground-color - Scrollbar's color
+/// @param {Color} $background-color [mix($foreground-color, white, 50%)] - Scrollbar's color
+/// @example scss - Scrollbar styling
+///   @include scrollbars(.5em, slategray);
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%)) {
+  // For Google Chrome
+  ::-webkit-scrollbar {
+      width:  $size;
+      height: $size;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      background: $foreground-color;
+  }
+
+  ::-webkit-scrollbar-track {
+      background: $background-color;
+  }
+
+  // For Internet Explorer
+  body {
+    scrollbar-face-color: $foreground-color;
+    scrollbar-track-color: $background-color;
+  }
+}
+
+@mixin justify($font-size){
+	text-align: justify;
+	font-size: $font-size;
+
+	&:after {
+		@include size(100% null);
+		content: "";
+		display: inline-block;
+	}
+}
+
+body {
+	font: 0.85em 'Roboto Slab', serif;
+}
+
+.main {
+	@include span-columns(12);
+	@include margin(5% null null 1.5%);
+}
+
+.first {
+	@include span-columns(4);
+	@include shift(2);
+}
+
+.status {
+	font-weight: bold;
+}
+
+.activity {
+	@include justify(1.4em);
+}
+
+.instructions {
+	@include justify(1.2em);
+}
+
+.button {
+	@include fill-parent();
+	@include size(null 1.7em);
+	line-height: 0;
+}
+
+.second {
+	@include span-columns(3);
+}
+
+.timer {
+	font-size: 5em;
+	text-align: center;
+	line-height: 1em;
+}
+
+.checking {
+	@include span-columns(12);
+	@include margin(2% null null null);
+	@include padding(1%);
+	@include size(null 70%);
+	@include scrollbars(.5em, slategray);
+	//background-color: #EFEEEE;
+	border: 1px solid #EFEEEE;
+	border-radius: 10px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.block {
+	@include span-columns(3);
+	@include omega(4n);
+	@include margin(null null 1% null);
+	@include padding(1%);
+	font-size: 0.85em;
+	cursor: pointer;
+	background-color: #A6BFE3;
+	border-radius: 5px;
+}
+
+.checker {
+	@include margin(5% null null null);
+	font-weight: bold;
+}
+
+.correct {
+	@include margin(null null null 20%);
+	float: left;
+}
+
+.incorrect {
+	@include margin(null 20% null null);
+	float: right;
+}
+
+.correct:hover {
+	color: green;
+}
+
+.incorrect:hover {
+	color: red;
+}

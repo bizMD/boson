@@ -38,3 +38,6 @@ node_modules
 
 # Ignore loki db
 loki.db
+
+# Ignore build files
+build/*

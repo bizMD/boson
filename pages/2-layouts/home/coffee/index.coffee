@@ -1,3 +1,10 @@
+###
+commenced = localStorage.getItem 'user id'
+if commenced is
+	window.location = '/exam'
+###
+
+require 'sugar'
 $ = require 'jquery'
 
 $ ->
@@ -16,7 +23,7 @@ $ ->
 	socket.on 'user id', (id) ->
 		localStorage.setItem 'user id', id.key
 		localStorage.setItem 'exam id', id.id
-		window.location = '/exam'
+		(-> window.location = '/exam').delay 100
 
 	$('.button').click ->
 		socket.emit 'user registered'

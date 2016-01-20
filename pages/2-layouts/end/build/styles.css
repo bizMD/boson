@@ -565,123 +565,40 @@ section {
     margin-right: 0; }
 
 body {
+  text-align: center;
   font: 0.85em 'Roboto Slab', serif; }
 
-.main {
+.goodbye {
   float: left;
   display: block;
   margin-right: 2.35765%;
   width: 100%;
-  margin-top: 5%;
-  margin-left: 1.5%; }
-  .main:last-child {
+  padding-top: 20%;
+  font-size: 8em; }
+  .goodbye:last-child {
     margin-right: 0; }
 
-.first {
+.message {
   float: left;
   display: block;
   margin-right: 2.35765%;
-  width: 31.76157%;
-  margin-left: 17.05961%; }
-  .first:last-child {
-    margin-right: 0; }
-
-.status {
-  font-weight: bold; }
-
-.activity {
-  text-align: justify;
-  font-size: 1.4em; }
-  .activity:after {
-    width: 100%;
-    content: "";
-    display: inline-block; }
-
-.instructions {
-  text-align: justify;
-  font-size: 1.2em; }
-  .instructions:after {
-    width: 100%;
-    content: "";
-    display: inline-block; }
-
-.button {
   width: 100%;
-  height: 1.7em;
-  line-height: 0; }
+  padding-bottom: 1%; }
+  .message:last-child {
+    margin-right: 0; }
 
-.second {
+.time {
   float: left;
   display: block;
   margin-right: 2.35765%;
-  width: 23.23176%; }
-  .second:last-child {
-    margin-right: 0; }
-
-.timer {
-  font-size: 5em;
+  width: 14.70196%;
+  margin-left: 42.64902%;
+  height: 1.3em;
   text-align: center;
-  line-height: 1em; }
-
-.checking {
-  float: left;
-  display: block;
-  margin-right: 2.35765%;
-  width: 100%;
-  margin-top: 2%;
-  padding: 1%;
-  height: 70%;
-  border: 1px solid #EFEEEE;
-  border-radius: 10px;
-  overflow-y: scroll;
-  overflow-x: hidden; }
-  .checking:last-child {
+  border: 1px;
+  border-radius: 5px;
+  background-color: #FBF6F6; }
+  .time:last-child {
     margin-right: 0; }
-  .checking ::-webkit-scrollbar {
-    width: 0.5em;
-    height: 0.5em; }
-  .checking ::-webkit-scrollbar-thumb {
-    background: slategray; }
-  .checking ::-webkit-scrollbar-track {
-    background: #b7bfc7; }
-  .checking body {
-    scrollbar-face-color: slategray;
-    scrollbar-track-color: #b7bfc7; }
-
-.block {
-  float: left;
-  display: block;
-  margin-right: 2.35765%;
-  width: 23.23176%;
-  margin-bottom: 1%;
-  padding: 1%;
-  font-size: 0.85em;
-  cursor: pointer;
-  background-color: #A6BFE3;
-  border-radius: 5px; }
-  .block:last-child {
-    margin-right: 0; }
-  .block:nth-child(4n) {
-    margin-right: 0; }
-  .block:nth-child(4n+1) {
-    clear: left; }
-
-.checker {
-  margin-top: 5%;
-  font-weight: bold; }
-
-.correct {
-  margin-left: 20%;
-  float: left; }
-
-.incorrect {
-  margin-right: 20%;
-  float: right; }
-
-.correct:hover {
-  color: green; }
-
-.incorrect:hover {
-  color: red; }
 
 /*# sourceMappingURL=styles.css.map */

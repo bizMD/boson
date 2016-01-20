@@ -2,6 +2,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Admin Panel</title>
+		<!-- For custom fonts -->
 		<link rel="stylesheet" href="/layouts/${data.name}/css">
 		<script src="/socket.io/socket.io.js"></script>
 		<script>
@@ -13,7 +14,7 @@
 			<div class="main panel">
 				<div class="first cell">
 					<if test="data.timer == '0:00'">
-						<var name="status" value="'concluded'"/>
+						<var name="status" value="'now concluded'"/>
 					</if>
 					<else-if test="data.active === true">
 						<var name="status" value="'active'"/>
@@ -31,10 +32,11 @@
 						<button class="button">$button</button>
 					</if>
 				</div>
+				<div class="second cell">
+					<div class="timer">${data.timer}</div>
+				</div>
 			</div>
-			<div class="second cell">
-				<div class="timer">${data.timer}</div>
-			</div>
+			<div class="manual checking station"></div>
 		</section>
 		<script src="/layouts/${data.name}/js"></script>
 	</body>

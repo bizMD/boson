@@ -1,0 +1,25 @@
+body {
+	text-align: center;
+	font: 0.85em 'Roboto Slab', serif;
+}
+
+.goodbye {
+	@include span-columns(12);
+	@include padding(20% null null null);
+	font-size: 8em;
+}
+
+.message {
+	@include span-columns(12);
+	@include padding(null null 1% null);
+}
+
+.time {
+	@include span-columns(2);
+	@include shift(5);
+	@include size(null 1.3em);
+	text-align: center;
+	border: 1px;
+	border-radius: 5px;
+	background-color: #FBF6F6;
+}

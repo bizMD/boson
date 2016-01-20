@@ -11,7 +11,7 @@ function create(__helpers) {
       '/css"><script src="/socket.io/socket.io.js"></script><script>\n\t\t\tvar socket = io();\n\t\t</script></head><body><section class="dashboard"><div class="main panel"><div class="first cell">');
 
     if (data.timer == '0:00') {
-      var status = 'concluded';
+      var status = 'now concluded';
     }
     else if (data.active === true) {
       var status = 'active';
@@ -40,9 +40,9 @@ function create(__helpers) {
         '</button>');
     }
 
-    out.w('</div></div><div class="second cell"><div class="timer">' +
+    out.w('</div><div class="second cell"><div class="timer">' +
       escapeXml(data.timer) +
-      '</div></div></section><script src="/layouts/' +
+      '</div></div></div><div class="manual checking station"></div></section><script src="/layouts/' +
       escapeXmlAttr(data.name) +
       '/js"></script></body></html>');
   };

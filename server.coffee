@@ -4,12 +4,18 @@ crypto = require 'crypto'
 domain = require 'domain'
 restify = require 'restify'
 socketio = require 'socket.io'
+querystring = require 'querystring'
 {resolve, sep} = require 'path'
 
 # Require the routes directory
 requireDir = require 'require-dir'
 require('coffee-script/register')
 routes = requireDir 'routes', recurse: true
+
+# Create event emitter class
+{EventEmitter} = require 'events'
+class EventedIO extends EventEmitter
+eventio = new EventedIO
 
 # Require the marko adapter
 require('marko/node-require').install();
@@ -76,12 +82,18 @@ server.get '/question/test', (rq, rs, nx) ->
 	q.pipe rs
 
 server.get '/question/current', (rq, rs, nx) ->
-	{userid} = rq.params
+	{userid} = querystring.parse rq.query()
 	rs.writeHead 200, {"Content-Type": "application/json"}
 	answers = db.getCollection 'answers'
-	answered = answers.find user: userid
-	console.log answered
-	rs.end '0'
+	answered = answers
+				.chain()
+				.find user: userid
+				.simplesort 'qid'
+				.data()
+	if answered.isEmpty() then rs.end '0'
+	else
+		qid = 1 + answered.last()?.qid.toNumber()
+		rs.end "#{qid}"
 	nx()
 
 server.get '/:name', (rq, rs, nx) ->
@@ -98,15 +110,17 @@ server.get '/:name', (rq, rs, nx) ->
 	, rs
 
 server.post '/submit', (rq, rs, nx) ->
+	rs.writeHead 200, {"Content-Type": "text/html"}
 	{qid, answer, userid} = rq.params
 	answers = db.getCollection 'answers'
 	users = db.getCollection 'users'
 	user = users.findOne key: userid
-	answers.insert
+	record =
 		qid: qid
 		answer: answer
 		user: user.key
-	rs.writeHead 200, {"Content-Type": "text/html"}
+	answers.insert record
+	eventio.emit 'insert to answers collection', record
 	rs.end()
 
 io.sockets.on 'connection', (socket) ->
@@ -125,14 +139,46 @@ io.sockets.on 'connection', (socket) ->
 		# Super no security method
 		users = db.getCollection 'users'
 		key = sessionKey()
-		users.insert key: key
-		socket.emit 'user id', {key: key, id: users.data.length}
+		id = users.data.length
+		record =
+			key: key
+			id: id
+		users.insert record
+		socket.emit 'user id', record
 
 	socket.on 'authenticate user', (id) ->
 		users = db.getCollection 'users'
+		user = users.find {key: id}
 		console.log "Authentication requested: #{id}"
-		if users.find {key: id} then socket.emit 'authenticated'
+		if not user.isEmpty() then socket.emit 'authenticated'
 		else socket.emit 'not authenticated'
+
+	socket.on 'admin authenticate', ->
+		console.log 'Admin authenticated'
+		eventio.on 'insert to answers collection', (data) ->
+			users = db.getCollection 'users'
+			user = users.findOne key: data.user
+			pack = Object.reject data, 'meta', '$loki'
+			pack.user = user.id
+			console.log pack
+			socket.emit 'user answered', pack
+
+	socket.on 'checked user submission', (data) ->
+		{qid, user, answer, checked} = data
+		scores = db.getCollection 'scores'
+		scores.insert
+			qid: qid
+			answer: answer
+			user: user
+			checked: checked
+
+	socket.on 'request for user score', (id) ->
+		scores = db.getCollection 'scores'
+		score = answers.find user: id
+		console.log score
+
+	socket.on 'disconnect', ->
+		console.log 'A user disconnected...'
 
 # Run the server under an active domain
 d.run ->

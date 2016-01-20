@@ -1,17 +1,26 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Exam</title>
-		<!--<link rel="stylesheet" href="/layouts/${data.name}/css">-->
+		<title>Done!</title>
+		<link rel="stylesheet" href="/layouts/${data.name}/css">
 		<script src="/socket.io/socket.io.js"></script>
 		<script>
 			var socket = io();
 		</script>
 	</head>
 	<body>
-		<section>
-			<h2 class="goodbye"></h2>
-		</section>
-		<!--<script src="/layouts/${data.name}/js"></script>-->
+		<if test="data.active === true">
+			<section class="closing page">
+				<h2 class="goodbye">EXAM CLOSED</h2>
+				<div class="message">You have completed the exam. Congratulations! Please sit tight while your fellows do the same. Do not leave this page to receive your results.</div>
+				<div class="remaining time">Time left: <span class="timer">${data.timer}</span></div>
+			</section>
+		</if>
+		<else>
+			<script>
+				window.location = '/home';
+			</script>
+		</else>
+		<script src="/layouts/${data.name}/js"></script>
 	</body>
 </html>

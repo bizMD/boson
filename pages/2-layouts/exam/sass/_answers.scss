@@ -31,6 +31,12 @@ input[type="radio"] {
 	@include hide();
 }
 
+.area {
+	@include margin(1.5% null 0.5% null);
+	@include fill-parent();
+	@include size(null 10em);
+}
+
 .button {
 	@include fill-parent();
 }

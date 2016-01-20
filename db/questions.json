@@ -45,6 +45,34 @@
 		"id": "5",
 		"section": "javascript",
 		"question": "Print the number 1 to 10 with a JS script. You must use recursion, you cannot keep state, and if you use variables, they must be immutable.",
+		"answer": "textarea"
+	},
+	{
+		"id": "6",
+		"section": "coffeescript",
+		"question": "Translate this into CoffeeScript",
+		"code": "var fn = function(x) {\n\tconsole.log(x);\n}",
+		"answer": "text"
+	},
+	{
+		"id": "7",
+		"section": "coffeescript",
+		"question": "Translate this into CoffeeScript",
+		"code": "var fn = function(x) {\n\tif(!x){\n\t\tx = 'default';\n\t}\n\treturn x;\n}",
+		"answer": "text"
+	},
+	{
+		"id": "8",
+		"section": "coffeescript",
+		"question": "Translate this into CoffeeScript",
+		"code": "var fn = function(x) {\n\tk = [];\n\tfor(var i=0; i<x.length; i+=1){\n\t\tif(true){\n\t\t\tk.push(x[i] * x[i]);\n\t\t}\n\t\treturn k;\n\t}\n}",
+		"answer": "text"
+	},
+	{
+		"id": "9",
+		"section": "coffeescript",
+		"question": "Translate this into CoffeeScript",
+		"code": "var tool = object.tool,\n\tasset = object.asset,\n\tweapon = object.weapon,\n\tbit = object.bit",
 		"answer": "text"
 	}
 ]

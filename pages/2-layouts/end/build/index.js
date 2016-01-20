@@ -9832,101 +9832,18 @@ return jQuery;
 }));
 
 },{}],2:[function(require,module,exports){
-var $, concludeActivity, createBlock, toggleActivity;
+var $;
+
+socket.emit('authenticate user', localStorage.getItem('user id'));
 
 $ = require('jquery');
-
-toggleActivity = function(active) {
-  switch (active) {
-    case 'Start':
-      $('.status').html('now ongoing');
-      $('.toggle').html('conclude');
-      return $('.button').html('Stop the Exam');
-    case 'Stop':
-      $('.status').html('inactive');
-      $('.toggle').html('enable');
-      return $('.button').html('Start');
-  }
-};
-
-concludeActivity = function() {
-  $('.button').remove();
-  $('.instructions').remove();
-  $('.status').html('now concluded');
-  return $('.timer').html('0:00');
-};
-
-createBlock = function(data) {
-  var answer, answerHolder, answerSpan, block, checker, correct, incorrect, qid, qidHolder, qidSpan, user, userHolder, userSpan;
-  qid = data.qid, answer = data.answer, user = data.user;
-  console.log('Creating the block');
-  block = $('<div></div>').addClass('block');
-  console.log('Creating the qidSpan');
-  qidSpan = $('<span></span>').html(qid).addClass('qid');
-  console.log('Creating the qidHolder');
-  qidHolder = $('<div></div>').html('QID: ');
-  console.log('Appending qidSpan to qidHolder');
-  qidSpan.appendTo(qidHolder);
-  console.log('Creating the userSpan');
-  userSpan = $('<span></span>').html(user).addClass('user');
-  console.log('Creating the userHolder');
-  userHolder = $('<div></div>').html('User: ');
-  console.log('Appending userSpan to userHolder');
-  userSpan.appendTo(userHolder);
-  console.log('Creating the answerSpan');
-  answerSpan = $('<span></span>').html(answer).addClass('answer');
-  console.log('Creating the answerHolder');
-  answerHolder = $('<div></div>').html('Their Answer: ');
-  console.log('Appending answerSpan to answerHolder');
-  answerSpan.appendTo(answerHolder);
-  correct = $('<div></div>').addClass('correct submission').html('Correct');
-  incorrect = $('<div></div>').addClass('incorrect submission').html('Incorrect');
-  checker = $('<div></div>').addClass('checker');
-  correct.appendTo(checker);
-  incorrect.appendTo(checker);
-  qidHolder.appendTo(block);
-  userHolder.appendTo(block);
-  answerHolder.appendTo(block);
-  checker.appendTo(block);
-  return block.appendTo($('.checking'));
-};
 
 $(function() {
   socket.on('time left', function(time) {
     return $('.timer').html("" + time);
   });
-  socket.on('end exam', function() {
-    return concludeActivity();
-  });
-  socket.on('authentication failed', function(message) {
-    return console.log(message);
-  });
-  socket.on('user answered', function(data) {
-    createBlock(data);
-    return console.log(data);
-  });
-  socket.emit('admin authenticate');
-  $('body').on('click', '.submission', function() {
-    var answer, checked, parent, qid, user;
-    checked = $(this).html();
-    parent = $(this).parent().parent();
-    qid = parent.find('.qid').html();
-    user = parent.find('.user').html();
-    answer = parent.find('.answer').html();
-    socket.emit('checked user submission', {
-      qid: qid,
-      user: user,
-      answer: answer,
-      checked: checked
-    });
-    return parent.remove();
-  });
-  return $('.button').click(function() {
-    if ($('.timer').html() === '0:00') {
-      return false;
-    }
-    socket.emit('toggle exam', true);
-    return toggleActivity($('.button').html());
+  return socket.on('end exam', function() {
+    return socket.emit('request for user score', localStorage.getItem('user id'));
   });
 });
 

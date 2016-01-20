@@ -1,5 +1,6 @@
 socket.emit 'authenticate user', localStorage.getItem 'user id'
 
+require 'sugar'
 $ = require 'jquery'
 oboe = require 'oboe'
 
@@ -8,6 +9,7 @@ oboe = require 'oboe'
 #questions.addCollection 'questions'
 
 questions = []
+qid = 0
 
 renderChoices = (choices) ->
 	for choice in choices
@@ -39,24 +41,44 @@ renderTextbox = ->
 
 	freetext.appendTo $ '.textbox'
 
+renderTextarea = ->
+	textarea = $ '<textarea></textarea>'
+		.addClass 'answer area'
+		.prop 'name', 'answer'
+		.prop 'placeholder', 'Enter your answer here'
+
+	textarea.appendTo $ '.textarea'
+
 hideQuestion = ->
 	$('.textbox')
+		.addClass 'hidden'
+		.empty()
+	$('.textarea')
 		.addClass 'hidden'
 		.empty()
 	$('.code').addClass 'hidden'
 	$('.choices').empty()
 
 recordAnswer = ->
+	console.log 'Answer is being recorded...'
 	textAnswer = $('input[name="answer"]')
 	checkAnswer =  $('input[name="answer"]:checked')
-	answer = if textAnswer.length is 1 then textAnswer.val() else checkAnswer.val()
+	textArea = $('textarea.answer')
+	#console.log textAnswer
+	#console.log checkAnswer
+	#console.log textArea
+	answer = if textAnswer.length is 1 then textAnswer.val() else if checkAnswer.length is 1 then checkAnswer.val() else textArea.val()
+	#console.log answer
 	$.post '/submit',
 		qid: qid
 		answer: answer
 		userid: localStorage.getItem 'user id'
 	, ->
-		hideQuestion()
-		renderQuestion ++qid
+		if ++qid != questions.length
+			hideQuestion()
+			renderQuestion qid
+		else
+			window.location = '/end'
 
 renderQuestion = (num) ->
 	question = questions[num]
@@ -68,32 +90,47 @@ renderQuestion = (num) ->
 	if question.answer is 'choices'
 		$('.choices').removeClass 'hidden'
 		renderChoices question.choices
+	if question.answer is 'textarea'
+		$('.textarea').removeClass 'hidden'
+		renderTextarea()
 	if question.code?
 		$('code').html question.code
 		$('.code').removeClass 'hidden'
 
 $ ->
 	socket.on 'not authenticated', ->
+		console.log 'Not authenticated'
 		window.location = '/home'
 
 	socket.on 'time left', (time) ->
-		$('.timer').html "#{time}"		
+		$('.timer').html "#{time}"
+
+	socket.on 'end exam', ->
+		window.location = '/home'
 
 	$('.button').click ->
+		console.log 'Answer is being provided...'
 		textAnswer = $('input[name="answer"]')
 		checkAnswer =  $('input[name="answer"]:checked')
-		answer = if textAnswer.length is 1 then textAnswer.val() else checkAnswer.val()
+		textArea = $('textarea.answer')
+		#console.log textAnswer
+		#console.log checkAnswer
+		#console.log textArea
+		answer = if textAnswer.length is 1 then textAnswer.val() else if checkAnswer.length is 1 then checkAnswer.val() else textArea.val()
+		#console.log answer
 		socket.emit 'user answer',
 			qid: qid
 			answer: answer
-		if qid + 1 != questions.length then recordAnswer()
-		else console.log 'End the quiz'
+		recordAnswer()
 
 	oboe '/question/test'
 	.node '!.*', (module) ->
 		questions.push module
 	.done ->
-		$.get '/question/current', userid: localStorage.getItem 'user id', (qid) ->
-			renderQuestion qid
+		userid = localStorage.getItem 'user id'
+		$.get '/question/current', {userid: userid}, (id) ->
+			qid = id.toNumber()
+			if qid == questions.length then window.location = '/end'
+			else renderQuestion qid
 
 	$('.number').html ('0000' + localStorage.getItem 'exam id').slice -4

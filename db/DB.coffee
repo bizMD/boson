@@ -68,6 +68,7 @@ class DB
 			'questions'
 			'answers'
 			'users'
+			'scores'
 		]
 		null
 
